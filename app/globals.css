@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Glowing button */
+.glow-button {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), 0 0 40px rgba(251, 191, 36, 0.2);
+  transition: all 0.3s ease;
+}
+.glow-button:hover {
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.3);
+}
+
+/* Gold accent lines */
+.gold-line::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  margin: 12px auto 0;
+}
+.gold-line-left::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  margin: 12px 0 0 0;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(251, 191, 36, 0.08);
+}
+
+.card-hover-arrow {
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.card-hover-arrow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(251, 191, 36, 0.08);
+}
+.card-hover-arrow:hover svg {
+  transform: translateX(4px);
+}
+
+/* Decorative corners */
+.corner-decor {
+  position: relative;
+}
+.corner-decor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-top: 2px solid rgba(251, 191, 36, 0.3);
+  border-left: 2px solid rgba(251, 191, 36, 0.3);
+}
+.corner-decor::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+  border-right: 2px solid rgba(251, 191, 36, 0.3);
+}
+
+/* Pattern background */
+.pattern-bg {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(251, 191, 36, 0.03) 0%, transparent 50%);
+}
+
+/* Countdown pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.countdown-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.float-animation {
+  animation: float 4s ease-in-out infinite;
+}
+.float-animation-delayed {
+  animation: float 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+/* Testimonial card */
+.testimonial-card {
+  background: linear-gradient(135deg, rgba(15, 15, 15, 0.9) 0%, rgba(20, 20, 20, 0.9) 100%);
+  backdrop-filter: blur(10px);
+}
+
+/* Font serif */
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Play button glow */
+.play-button {
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
+  transition: all 0.3s ease;
+}
+.play-button:hover {
+  box-shadow: 0 0 40px rgba(251, 191, 36, 0.4), 0 0 60px rgba(251, 191, 36, 0.2);
+}
+
+/* Image tilt on hover */
+@media (min-width: 768px) {
+  .image-tilt {
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  .image-tilt:hover {
+    transform: scale(1.02) rotateY(1deg) rotateX(-0.5deg);
+  }
+}
+
+/* Highlight text */
+.highlight-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* Form input focus glow */
+input:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+}
+
+/* Link hover arrow slide */
+a svg {
+  transition: all 0.3s ease;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.5);
+}
+
+/* Selection color */
+::selection {
+  background: rgba(251, 191, 36, 0.3);
+  color: white;
+}
