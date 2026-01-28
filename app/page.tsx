@@ -759,16 +759,16 @@ function Gallery() {
   const [isPausedNetworking, setIsPausedNetworking] = useState(false)
 
   const foodColumn1 = [
-    '/images/food-1.webp',
-    '/images/food-2.webp',
-    '/images/food-1.webp',
-    '/images/food-2.webp',
+    '/images/Food-1.webp',
+    '/images/Food-2.webp',
+    '/images/Food-1.webp',
+    '/images/Food-2.webp',
   ]
   const foodColumn2 = [
-    '/images/food-3.webp',
-    '/images/food-1.webp',
-    '/images/food-3.webp',
-    '/images/food-1.webp',
+    '/images/Food-3.webp',
+    '/images/Food-1.webp',
+    '/images/Food-3.webp',
+    '/images/Food-1.webp',
   ]
 
   const networkingColumn1 = [
