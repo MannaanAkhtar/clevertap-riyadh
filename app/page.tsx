@@ -654,7 +654,7 @@ function About() {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
               >
-                <Image src="/images/networking-4.jpg" alt="Professionals networking at a previous CleverTap event" fill className="object-cover opacity-80" />
+                <Image src="/images/networking-4.webp" alt="Professionals networking at a previous CleverTap event" fill className="object-cover opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               </motion.div>
             </div>
@@ -772,16 +772,16 @@ function Gallery() {
   ]
 
   const networkingColumn1 = [
-    '/images/networking-1.jpg',
-    '/images/networking-3.jpg',
-    '/images/networking-1.jpg',
-    '/images/networking-3.jpg',
+    '/images/networking-1.webp',
+    '/images/networking-3.webp',
+    '/images/networking-1.webp',
+    '/images/networking-3.webp',
   ]
   const networkingColumn2 = [
-    '/images/networking-2.jpg',
-    '/images/networking-4.jpg',
-    '/images/networking-2.jpg',
-    '/images/networking-4.jpg',
+    '/images/networking-2.webp',
+    '/images/networking-4.webp',
+    '/images/networking-2.webp',
+    '/images/networking-4.webp',
   ]
 
   return (
