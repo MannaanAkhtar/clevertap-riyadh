@@ -101,6 +101,74 @@ function BackToTop() {
 }
 
 // ============================================
+// LEGAL MODAL
+// ============================================
+function LegalModal({ 
+  isOpen, 
+  onClose, 
+  title, 
+  content 
+}: { 
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  content: React.ReactNode
+}) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="legal-title"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-[#0f0f0f] border border-amber-500/20 rounded-lg p-6 sm:p-8 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 id="legal-title" className="text-lg sm:text-xl font-serif text-white">{title}</h3>
+              <button
+                onClick={onClose}
+                className="text-white/40 hover:text-white transition-colors p-1"
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="text-white/50 text-xs sm:text-sm leading-relaxed space-y-3">
+              {content}
+            </div>
+            <div className="mt-6 text-center">
+              <motion.button 
+                onClick={onClose}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2 bg-amber-400 hover:bg-amber-300 text-black rounded-full text-xs sm:text-sm font-semibold transition-colors"
+              >
+                Close
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+// ============================================
 // SPLIT TEXT ANIMATION
 // ============================================
 function SplitText({ 
@@ -158,21 +226,16 @@ function AnimatedCounter({
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
   
-  // Start with FINAL value (matches server render)
   const [displayValue, setDisplayValue] = useState(value)
   const [hasAnimated, setHasAnimated] = useState(false)
   
   useEffect(() => {
-    // Skip if already animated or not in view
     if (hasAnimated || !isInView) return
     
-    // Mark as animated to prevent re-runs
     setHasAnimated(true)
     
-    // Handle infinity symbol - no animation needed
     if (value === '∞') return
     
-    // Extract number and suffix (e.g., "50+" -> 50 and "+")
     const numMatch = value.match(/(\d+)/)
     const suffix = value.match(/[^\d]+$/)?.[0] || ''
     
@@ -180,11 +243,9 @@ function AnimatedCounter({
     
     const target = parseInt(numMatch[1])
     
-    // Small delay to ensure hydration is complete, then reset to 0
     const hydrationDelay = setTimeout(() => {
       setDisplayValue('0' + suffix)
       
-      // Start counting animation after the specified delay
       const animationDelay = setTimeout(() => {
         const startTime = Date.now()
         const animDuration = duration * 1000
@@ -193,7 +254,6 @@ function AnimatedCounter({
           const elapsed = Date.now() - startTime
           const progress = Math.min(elapsed / animDuration, 1)
           
-          // Ease out cubic
           const eased = 1 - Math.pow(1 - progress, 3)
           const current = Math.floor(eased * target)
           
@@ -202,7 +262,7 @@ function AnimatedCounter({
           if (progress < 1) {
             requestAnimationFrame(tick)
           } else {
-            setDisplayValue(value) // Ensure exact final value
+            setDisplayValue(value)
           }
         }
         
@@ -210,7 +270,7 @@ function AnimatedCounter({
       }, delay * 1000)
       
       return () => clearTimeout(animationDelay)
-    }, 50) // 50ms delay for hydration safety
+    }, 50)
     
     return () => clearTimeout(hydrationDelay)
   }, [isInView, hasAnimated, value, duration, delay])
@@ -282,7 +342,7 @@ function MagneticButton({
 }
 
 // ============================================
-// HEADER - FIXED FOR MOBILE
+// HEADER - BIGGER LOGO & TEXT
 // ============================================
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -306,7 +366,7 @@ function Header() {
       role="banner"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-16 sm:h-18">
           <motion.a 
             href="#top" 
             className="cursor-pointer"
@@ -317,14 +377,14 @@ function Header() {
             <Image 
               src="/images/clevertap-logo.webp" 
               alt="CleverTap Logo" 
-              width={120} 
-              height={28}
-              className="h-6 sm:h-7 w-auto hover:opacity-80 transition-opacity"
+              width={140} 
+              height={32}
+              className="h-7 sm:h-8 w-auto hover:opacity-80 transition-opacity"
             />
           </motion.a>
           <MagneticButton 
             href="#registration" 
-            className="glow-button px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-black bg-amber-400 hover:bg-amber-300 rounded-full transition-all inline-block whitespace-nowrap"
+            className="glow-button px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-wider text-black bg-amber-400 hover:bg-amber-300 rounded-full transition-all inline-block whitespace-nowrap"
             strength={0.4}
             ariaLabel="Register for the event"
           >
@@ -337,7 +397,7 @@ function Header() {
 }
 
 // ============================================
-// HERO WITH PARALLAX - FIXED FOR MOBILE
+// HERO - MAJLIS AL-SUHOOR PROMINENT
 // ============================================
 function Hero() {
   const ref = useRef(null)
@@ -352,7 +412,7 @@ function Hero() {
   
   return (
     <section ref={ref} id="top" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black" aria-label="Hero section">
-      {/* Parallax Background - FULL SCREEN COVER */}
+      {/* Parallax Background */}
       <motion.div 
         className="absolute inset-0"
         style={{ y: backgroundY }}
@@ -372,7 +432,6 @@ function Hero() {
             sizes="100vw"
           />
         </motion.div>
-        {/* Gradient overlays for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30" />
       </motion.div>
@@ -414,28 +473,23 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-base sm:text-xl md:text-2xl text-amber-300 mb-2 font-light"
+          className="text-base sm:text-xl md:text-2xl text-amber-300 mb-4 font-light"
           dir="rtl"
           lang="ar"
         >
           مجلس سحور كليڤر تاب
         </motion.p>
 
-        {/* CleverTap title with split text */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-1 font-serif text-amber-400">
-          <SplitText delay={0.4} staggerDelay={0.05}>CleverTap</SplitText>
+        {/* Main title - Majlis Al-Suhoor with gravitas */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-4 font-serif text-white">
+          <SplitText delay={0.4} staggerDelay={0.05}>Majlis Al-Suhoor</SplitText>
         </h1>
-        
-        {/* Majlis title with split text */}
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light tracking-tight mb-3 text-white font-serif">
-          <SplitText delay={0.8} staggerDelay={0.04}>Majlis Al-Suhoor</SplitText>
-        </h2>
 
         {/* Gold line */}
         <motion.div
           initial={{ width: 0, opacity: 0 }}
-          animate={{ width: 80, opacity: 1 }}
-          transition={{ duration: 0.8, ease: motionConfig.ease, delay: 1.4 }}
+          animate={{ width: 100, opacity: 1 }}
+          transition={{ duration: 0.8, ease: motionConfig.ease, delay: 1.0 }}
           className="h-0.5 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 mx-auto mb-4"
           aria-hidden="true"
         />
@@ -444,8 +498,8 @@ function Hero() {
         <motion.p
           initial={{ opacity: 0, y: motionConfig.y }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay: 1.6 }}
-          className="text-xs sm:text-sm md:text-base text-white/80 font-light tracking-wide mb-6 sm:mb-8 px-4"
+          transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay: 1.2 }}
+          className="text-sm sm:text-base md:text-lg text-white/80 font-light tracking-wide mb-6 sm:mb-8 px-4"
         >
           A Celebration of Flavor, Fellowship, and Future
         </motion.p>
@@ -454,7 +508,7 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0, y: motionConfig.y }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay: 1.8 }}
+          transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay: 1.4 }}
           className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs px-2"
         >
           {[
@@ -466,7 +520,7 @@ function Hero() {
               key={item.text}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 2 + index * 0.1 }}
+              transition={{ duration: 0.4, delay: 1.6 + index * 0.1 }}
               whileHover={{ scale: 1.05, borderColor: 'rgba(251, 191, 36, 0.5)' }}
               className="flex items-center gap-1.5 sm:gap-2 text-white bg-black/50 backdrop-blur-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 hover:bg-black/60 transition-all cursor-default"
             >
@@ -485,7 +539,7 @@ function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
+        transition={{ delay: 2.0 }}
         className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2"
       >
         <motion.a
@@ -506,7 +560,7 @@ function Hero() {
 }
 
 // ============================================
-// COUNTDOWN WITH FLIP ANIMATION
+// COUNTDOWN - SUHOOR UNDER THE STARS
 // ============================================
 function Countdown() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
@@ -552,7 +606,7 @@ function Countdown() {
           className="text-center mb-6"
         >
           <p className="text-amber-400/70 text-[10px] font-medium uppercase tracking-[0.2em] mb-1">Don&apos;t Miss Out</p>
-          <h2 className="text-xl md:text-2xl font-light text-white font-serif gold-line">Event Starts In</h2>
+          <h2 className="text-xl md:text-2xl font-light text-white font-serif gold-line">Suhoor Under the Stars</h2>
         </motion.div>
         <div className="flex justify-center gap-2 sm:gap-3 md:gap-6" role="timer" aria-live="polite">
           {timeUnits.map((item, index) => (
@@ -666,90 +720,6 @@ function About() {
 }
 
 // ============================================
-// STAT CARD WITH ANIMATION
-// ============================================
-function StatCard({ 
-  value, 
-  label, 
-  delay = 0, 
-  isInView,
-  animate = true 
-}: { 
-  value: string
-  label: string
-  delay?: number
-  isInView: boolean
-  animate?: boolean
-}) {
-  const [displayValue, setDisplayValue] = useState(animate ? '0' : value)
-  const [hasAnimated, setHasAnimated] = useState(false)
-  
-  useEffect(() => {
-    if (!isInView || hasAnimated || !animate) return
-    
-    setHasAnimated(true)
-    
-    // Handle infinity
-    if (value === '∞') {
-      const timeout = setTimeout(() => setDisplayValue('∞'), delay * 1000 + 500)
-      return () => clearTimeout(timeout)
-    }
-    
-    // Extract number and suffix
-    const numMatch = value.match(/(\d+)/)
-    const suffixMatch = value.match(/[^\d]+$/)
-    
-    if (!numMatch) {
-      setDisplayValue(value)
-      return
-    }
-    
-    const targetNumber = parseInt(numMatch[1])
-    const suffix = suffixMatch ? suffixMatch[0] : ''
-    
-    // Delay before starting
-    const delayMs = delay * 1000
-    
-    const delayTimeout = setTimeout(() => {
-      const duration = 1500 // 1.5 seconds
-      const startTime = Date.now()
-      
-      const tick = () => {
-        const elapsed = Date.now() - startTime
-        const progress = Math.min(elapsed / duration, 1)
-        const eased = 1 - Math.pow(1 - progress, 3)
-        const current = Math.floor(eased * targetNumber)
-        
-        setDisplayValue(current + suffix)
-        
-        if (progress < 1) {
-          requestAnimationFrame(tick)
-        }
-      }
-      
-      requestAnimationFrame(tick)
-    }, delayMs)
-    
-    return () => clearTimeout(delayTimeout)
-  }, [isInView, value, delay, hasAnimated, animate])
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: motionConfig.y }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay }}
-      whileHover={{ y: -4, borderColor: 'rgba(251, 191, 36, 0.2)' }}
-      className="card-hover p-2 sm:p-3 bg-[#0f0f0f] rounded-lg border border-white/5 text-center transition-all"
-    >
-      <div className="text-xl sm:text-2xl font-light text-amber-400">
-        {displayValue}
-      </div>
-      <div className="text-[8px] sm:text-[9px] text-white/30 uppercase tracking-wider mt-0.5">{label}</div>
-    </motion.div>
-  )
-}
-
-// ============================================
 // GALLERY WITH PAUSE ON HOVER
 // ============================================
 function Gallery() {
@@ -759,10 +729,10 @@ function Gallery() {
   const [isPausedNetworking, setIsPausedNetworking] = useState(false)
 
   const foodColumn1 = [
-    '/images/Food-1.webp',
-    '/images/Food-2.webp',
-    '/images/Food-1.webp',
-    '/images/Food-2.webp',
+    '/images/food-1.webp',
+    '/images/food-2.webp',
+    '/images/food-1.webp',
+    '/images/food-2.webp',
   ]
   const foodColumn2 = [
     '/images/Food-3.webp',
@@ -1122,7 +1092,7 @@ function EventDetails() {
 }
 
 // ============================================
-// REGISTRATION WITH SUCCESS MODAL
+// REGISTRATION - DIETARY OPTIONAL, REQUEST INVITE
 // ============================================
 function Registration() {
   const ref = useRef(null)
@@ -1226,9 +1196,9 @@ function Registration() {
                   <input type="text" id="organization" name="organization" required value={formData.organization} onChange={handleChange} className={inputClass} placeholder="Company name" aria-required="true" />
                 </div>
                 <div>
-                  <label htmlFor="dietary" className={labelClass}>Dietary Requirements *</label>
-                  <select id="dietary" name="dietary" required value={formData.dietary} onChange={handleChange} className={inputClass} aria-required="true">
-                    <option value="">Select option</option>
+                  <label htmlFor="dietary" className={labelClass}>Dietary Requirements</label>
+                  <select id="dietary" name="dietary" value={formData.dietary} onChange={handleChange} className={inputClass}>
+                    <option value="">Select option (optional)</option>
                     <option value="none">No special requirements</option>
                     <option value="vegetarian">Vegetarian</option>
                     <option value="vegan">Vegan</option>
@@ -1260,7 +1230,7 @@ function Registration() {
                       Submitting...
                     </>
                   ) : (
-                    'Submit Registration'
+                    'Request Invite'
                   )}
                 </motion.button>
               </div>
@@ -1299,8 +1269,8 @@ function Registration() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </motion.div>
-              <h3 id="success-title" className="text-lg sm:text-xl font-serif text-white mb-2">Registration Complete!</h3>
-              <p className="text-white/50 text-xs sm:text-sm mb-6">Thank you for registering. We&apos;ll send venue details to your email soon.</p>
+              <h3 id="success-title" className="text-lg sm:text-xl font-serif text-white mb-2">Invite Requested!</h3>
+              <p className="text-white/50 text-xs sm:text-sm mb-6">Thank you for your interest. We&apos;ll review your request and send venue details to your email soon.</p>
               <motion.button 
                 onClick={() => setIsSuccess(false)}
                 whileHover={{ scale: 1.05 }}
@@ -1318,9 +1288,11 @@ function Registration() {
 }
 
 // ============================================
-// FOOTER WITH WORKING LINKS
+// FOOTER WITH LEGAL MODALS
 // ============================================
 function Footer() {
+  const [activeModal, setActiveModal] = useState<string | null>(null)
+
   const quickLinks = [
     { name: 'About Event', href: '#about' },
     { name: 'Highlights', href: '#video' },
@@ -1328,82 +1300,152 @@ function Footer() {
   ]
   
   const legalLinks = [
-    { name: 'Privacy Policy', href: '#' },
-    { name: 'Terms of Service', href: '#' },
-    { name: 'Cookie Policy', href: '#' }
+    { name: 'Privacy Policy', key: 'privacy' },
+    { name: 'Terms of Service', key: 'terms' },
+    { name: 'Cookie Policy', key: 'cookies' }
   ]
 
+  const legalContent = {
+    privacy: (
+      <>
+        <p><strong className="text-white">Privacy Policy</strong></p>
+        <p>Last updated: January 2026</p>
+        <p>CleverTap respects your privacy and is committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you register for our events.</p>
+        <p><strong className="text-white">Information We Collect:</strong></p>
+        <p>We collect personal information you provide during registration, including your name, email address, phone number, job title, organization, and dietary requirements.</p>
+        <p><strong className="text-white">How We Use Your Information:</strong></p>
+        <p>Your information is used solely for event coordination, communication about the event, and improving our services. We do not sell or share your personal data with third parties for marketing purposes.</p>
+        <p><strong className="text-white">Contact:</strong></p>
+        <p>For any privacy-related questions, please contact us at privacy@clevertap.com</p>
+      </>
+    ),
+    terms: (
+      <>
+        <p><strong className="text-white">Terms of Service</strong></p>
+        <p>Last updated: January 2026</p>
+        <p>By registering for CleverTap Majlis Al-Suhoor, you agree to the following terms:</p>
+        <p><strong className="text-white">Event Registration:</strong></p>
+        <p>Registration is subject to availability and approval. CleverTap reserves the right to accept or decline any registration at its sole discretion.</p>
+        <p><strong className="text-white">Event Changes:</strong></p>
+        <p>CleverTap reserves the right to modify event details, including date, time, venue, or format, with reasonable notice to registered attendees.</p>
+        <p><strong className="text-white">Code of Conduct:</strong></p>
+        <p>Attendees are expected to conduct themselves professionally and respectfully throughout the event.</p>
+        <p><strong className="text-white">Liability:</strong></p>
+        <p>CleverTap is not liable for any personal injury, loss, or damage incurred during the event.</p>
+      </>
+    ),
+    cookies: (
+      <>
+        <p><strong className="text-white">Cookie Policy</strong></p>
+        <p>Last updated: January 2026</p>
+        <p>This website uses cookies to enhance your browsing experience.</p>
+        <p><strong className="text-white">What Are Cookies:</strong></p>
+        <p>Cookies are small text files stored on your device when you visit a website. They help us remember your preferences and understand how you interact with our site.</p>
+        <p><strong className="text-white">Types of Cookies We Use:</strong></p>
+        <p>• <strong className="text-white/70">Essential Cookies:</strong> Required for the website to function properly.</p>
+        <p>• <strong className="text-white/70">Analytics Cookies:</strong> Help us understand how visitors interact with our website.</p>
+        <p><strong className="text-white">Managing Cookies:</strong></p>
+        <p>You can control cookies through your browser settings. Note that disabling certain cookies may affect website functionality.</p>
+      </>
+    )
+  }
+
   return (
-    <footer className="bg-[#050505] border-t border-amber-500/10" role="contentinfo">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* Quick Links & Legal - Side by side on mobile */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6 text-center">
-          <nav aria-label="Quick links">
-            <h4 className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-3">Quick Links</h4>
-            <ul className="space-y-1.5">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <a href={link.href} className="text-white/35 text-xs hover:text-amber-400 transition-colors inline-flex items-center gap-1 group">
-                    {link.name}
-                    <svg className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <nav aria-label="Legal links">
-            <h4 className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-3">Legal</h4>
-            <ul className="space-y-1.5">
-              {legalLinks.map((link) => (
-                <li key={link.name}>
-                  <a href={link.href} className="text-white/35 text-xs hover:text-amber-400 transition-colors inline-flex items-center gap-1 group">
-                    {link.name}
-                    <svg className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+    <>
+      <footer className="bg-[#050505] border-t border-amber-500/10" role="contentinfo">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           
-          {/* Contact - Full width on mobile, third column on desktop */}
-          <div className="col-span-2 md:col-span-1 mt-4 md:mt-0">
-            <h4 className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-3">Contact</h4>
-            <a href="tel:+971569100679" className="text-amber-400/80 text-xs hover:text-amber-400 transition-colors block mb-3" aria-label="Call us at +971 569 100 679">+971 569 100 679</a>
-            <div className="flex gap-2 justify-center md:justify-center" role="list" aria-label="Social media links">
-              {[
-                { name: 'twitter', label: 'Follow us on Twitter' },
-                { name: 'linkedin', label: 'Connect on LinkedIn' },
-                { name: 'instagram', label: 'Follow us on Instagram' }
-              ].map((social) => (
-                <motion.a
-                  key={social.name}
-                  href="#"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/30 flex items-center justify-center transition-all"
-                  aria-label={social.label}
-                  role="listitem"
-                >
-                  <svg className="w-3.5 h-3.5 text-white/40" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    {social.name === 'twitter' && <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>}
-                    {social.name === 'linkedin' && <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>}
-                    {social.name === 'instagram' && <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>}
-                  </svg>
-                </motion.a>
-              ))}
+          {/* Quick Links & Legal - Side by side on mobile */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6 text-center">
+            <nav aria-label="Quick links">
+              <h4 className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-3">Quick Links</h4>
+              <ul className="space-y-1.5">
+                {quickLinks.map((link) => (
+                  <li key={link.name}>
+                    <a href={link.href} className="text-white/35 text-xs hover:text-amber-400 transition-colors inline-flex items-center gap-1 group">
+                      {link.name}
+                      <svg className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <nav aria-label="Legal links">
+              <h4 className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-3">Legal</h4>
+              <ul className="space-y-1.5">
+                {legalLinks.map((link) => (
+                  <li key={link.name}>
+                    <button 
+                      onClick={() => setActiveModal(link.key)}
+                      className="text-white/35 text-xs hover:text-amber-400 transition-colors inline-flex items-center gap-1 group"
+                    >
+                      {link.name}
+                      <svg className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            
+            {/* Contact - Full width on mobile, third column on desktop */}
+            <div className="col-span-2 md:col-span-1 mt-4 md:mt-0">
+              <h4 className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-3">Contact</h4>
+              <a href="tel:+971569100679" className="text-amber-400/80 text-xs hover:text-amber-400 transition-colors block mb-3" aria-label="Call us at +971 569 100 679">+971 569 100 679</a>
+              <div className="flex gap-2 justify-center md:justify-center" role="list" aria-label="Social media links">
+                {[
+                  { name: 'twitter', label: 'Follow us on Twitter' },
+                  { name: 'linkedin', label: 'Connect on LinkedIn' },
+                  { name: 'instagram', label: 'Follow us on Instagram' }
+                ].map((social) => (
+                  <motion.a
+                    key={social.name}
+                    href="#"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="w-8 h-8 rounded-full bg-white/5 hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/30 flex items-center justify-center transition-all"
+                    aria-label={social.label}
+                    role="listitem"
+                  >
+                    <svg className="w-3.5 h-3.5 text-white/40" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      {social.name === 'twitter' && <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>}
+                      {social.name === 'linkedin' && <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>}
+                      {social.name === 'instagram' && <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>}
+                    </svg>
+                  </motion.a>
+                ))}
+              </div>
             </div>
           </div>
+          
+          <div className="pt-6 border-t border-amber-500/10 text-center">
+            <p className="text-white/20 text-[10px]">© 2026 CleverTap. All Rights Reserved.</p>
+          </div>
         </div>
-        
-        <div className="pt-6 border-t border-amber-500/10 text-center">
-          <p className="text-white/20 text-[10px]">© 2026 CleverTap. All Rights Reserved.</p>
-        </div>
-      </div>
-    </footer>
+      </footer>
+
+      {/* Legal Modals */}
+      <LegalModal
+        isOpen={activeModal === 'privacy'}
+        onClose={() => setActiveModal(null)}
+        title="Privacy Policy"
+        content={legalContent.privacy}
+      />
+      <LegalModal
+        isOpen={activeModal === 'terms'}
+        onClose={() => setActiveModal(null)}
+        title="Terms of Service"
+        content={legalContent.terms}
+      />
+      <LegalModal
+        isOpen={activeModal === 'cookies'}
+        onClose={() => setActiveModal(null)}
+        title="Cookie Policy"
+        content={legalContent.cookies}
+      />
+    </>
   )
 }
 
