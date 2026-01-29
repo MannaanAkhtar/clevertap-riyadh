@@ -456,7 +456,7 @@ function Hero() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/riyadh-bg.png"
+            src="/images/bg-bg.png"
             alt="Riyadh Skyline at dusk"
             fill
             className="object-cover object-[center_20%] sm:object-[center_30%] md:object-center"
@@ -497,51 +497,51 @@ function Hero() {
       />
 
       <motion.div 
-        className="relative z-10 max-w-4xl mx-auto px-4 text-center pt-16 sm:pt-14"
+        className="relative z-10 max-w-5xl mx-auto px-4 text-center pt-16 sm:pt-14"
         style={{ y: textY, opacity }}
       >
-        {/* Arabic text */}
+        {/* Arabic text - BIGGER */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-base sm:text-xl md:text-2xl text-amber-300 mb-4 font-light"
+          className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-amber-300 mb-4 sm:mb-6 font-light"
           dir="rtl"
           lang="ar"
         >
           مجلس سحور كليڤر تاب
         </motion.p>
 
-        {/* Main title - Majlis Al-Suhoor with gravitas */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-4 font-serif text-white">
+        {/* Main title - Majlis Al-Suhoor - MUCH BIGGER */}
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-medium tracking-tight mb-4 sm:mb-6 font-serif text-white">
           <SplitText delay={0.4} staggerDelay={0.05}>Majlis Al-Suhoor</SplitText>
         </h1>
 
         {/* Gold line */}
         <motion.div
           initial={{ width: 0, opacity: 0 }}
-          animate={{ width: 100, opacity: 1 }}
+          animate={{ width: 120, opacity: 1 }}
           transition={{ duration: 0.8, ease: motionConfig.ease, delay: 1.0 }}
-          className="h-0.5 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 mx-auto mb-4"
+          className="h-0.5 sm:h-1 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 mx-auto mb-4 sm:mb-6"
           aria-hidden="true"
         />
 
-        {/* Tagline */}
+        {/* Tagline - BIGGER */}
         <motion.p
           initial={{ opacity: 0, y: motionConfig.y }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay: 1.2 }}
-          className="text-sm sm:text-base md:text-lg text-white/80 font-light tracking-wide mb-6 sm:mb-8 px-4"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 font-light tracking-wide mb-8 sm:mb-10 px-4"
         >
           A Celebration of Flavor, Fellowship, and Future
         </motion.p>
 
-        {/* Info pills */}
+        {/* Info pills - SLIGHTLY BIGGER */}
         <motion.div
           initial={{ opacity: 0, y: motionConfig.y }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: motionConfig.duration, ease: motionConfig.ease, delay: 1.4 }}
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs px-2"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm px-2"
         >
           {[
             { icon: 'location', text: 'Riyadh, Saudi Arabia' },
@@ -554,9 +554,9 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.6 + index * 0.1 }}
               whileHover={{ scale: 1.05, borderColor: 'rgba(251, 191, 36, 0.5)' }}
-              className="flex items-center gap-1.5 sm:gap-2 text-white bg-black/50 backdrop-blur-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 hover:bg-black/60 transition-all cursor-default"
+              className="flex items-center gap-2 text-white bg-black/50 backdrop-blur-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/20 hover:bg-black/60 transition-all cursor-default"
             >
-              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
                 {item.icon === 'location' && <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />}
                 {item.icon === 'calendar' && <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />}
                 {item.icon === 'clock' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />}
@@ -764,15 +764,15 @@ function Gallery() {
     '/images/food-2.webp',
     '/images/food-1.webp',
     '/images/food-3.webp',
-    '/images/food-5.webp',
+    '/images/Food-5.webp',
     '/images/food-4.webp',
   ]
   const foodColumn2 = [
-    '/images/food-4.webp',
-    '/images/food-3.webp',
-    '/images/food-5.webp',
+    '/images/Food-4.webp',
+    '/images/Food-3.webp',
+    '/images/Food-5.webp',
     '/images/food-2.webp',
-    '/images/food-1.webp',
+    '/images/Food-1.webp',
   ]
 
   const networkingColumn1 = [
