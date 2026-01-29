@@ -768,11 +768,11 @@ function Gallery() {
     '/images/food-4.webp',
   ]
   const foodColumn2 = [
-    '/images/Food-4.webp',
-    '/images/Food-3.webp',
-    '/images/Food-5.webp',
+    '/images/food-4.webp',
+    '/images/food-3.webp',
+    '/images/food-5.webp',
     '/images/food-2.webp',
-    '/images/Food-1.webp',
+    '/images/food-1.webp',
   ]
 
   const networkingColumn1 = [
