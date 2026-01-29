@@ -764,7 +764,7 @@ function Gallery() {
     '/images/food-2.webp',
     '/images/food-1.webp',
     '/images/food-3.webp',
-    '/images/Food-5.webp',
+    '/images/food-5.webp',
     '/images/food-4.webp',
   ]
   const foodColumn2 = [
